@@ -1,59 +1,160 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏆 FAC Andrézieux — Quiz Assemblée Générale
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Application web de quiz interactive développée pour l'Assemblée Générale du **FAC Andrézieux** (Forez Athletic Club). Les adhérents peuvent tester leurs connaissances sur l'athlétisme et le club, s'affronter au classement et voter pour le futur maillot du club.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fonctionnalités
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Côté public
+- **Quiz interactif** — 20 questions chronométrées (30 secondes par question)
+- **Système de points** — 500 pts de base + jusqu'à 500 pts de bonus vitesse
+- **3 jokers** — 50/50, Vote du public, Question au coach
+- **Retour visuel** — affichage en vert/rouge de la bonne/mauvaise réponse après chaque réponse
+- **Classement général** — podium visuel pour le top 3, liste complète pour les suivants
+- **Vote maillot** — vote pour le futur maillot du club
+- **Anti-triche** — une participation par personne (IP + browser token)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Back-office admin
+- Gestion des questions et réponses (CRUD complet)
+- Classement avec suppression de sessions
+- Gestion des votes maillot
+- Liste des joueurs avec historique
+- **Paramètres dynamiques** : couleurs, logo, textes, mode de participation
+- Mode de participation configurable : une fois au total / une fois par jour / illimité
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Stack technique
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Composant | Version |
+|-----------|---------|
+| PHP | 8.3 |
+| Laravel | 12 |
+| Base de données | MySQL |
+| Auth | Laravel Breeze (Blade) |
+| Build | Vite |
+| CSS | Vanilla CSS (variables dynamiques) |
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+### Prérequis
+- PHP ≥ 8.2
+- Composer
+- MySQL
+- Node.js + npm
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Étapes
 
-## Contributing
+```bash
+# 1. Cloner le dépôt
+git clone https://github.com/Flogerbe/Question-fac.git
+cd Question-fac
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 2. Installer les dépendances PHP
+composer install
 
-## Code of Conduct
+# 3. Installer les dépendances JS et builder
+npm install && npm run build
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 4. Configurer l'environnement
+cp .env.example .env
+php artisan key:generate
 
-## Security Vulnerabilities
+# 5. Configurer la BDD dans .env
+# DB_DATABASE=fac_quiz
+# DB_USERNAME=root
+# DB_PASSWORD=
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 6. Créer les tables et seeder les questions
+php artisan migrate
+php artisan db:seed
 
-## License
+# 7. Créer le compte admin
+php artisan breeze:install   # si pas encore fait
+php artisan make:user        # ou via l'interface /register puis supprimer la route
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+> Pour créer un compte admin directement en base :
+> ```bash
+> php artisan tinker --execute="App\Models\User::create(['name'=>'Admin','email'=>'admin@fac-andrezieux.fr','password'=>bcrypt('votre-mot-de-passe'),'email_verified_at'=>now()]);"
+> ```
+
+---
+
+## Configuration
+
+Tous les paramètres sont modifiables depuis le back-office **`/admin/parametres`** :
+
+| Paramètre | Description |
+|-----------|-------------|
+| Couleurs | Bleu principal, bleu foncé, orange |
+| Logo | Import JPG/PNG/GIF |
+| Titre & sous-titre | Texte affiché sur la page d'accueil |
+| Mode participation | `once` / `par_jour` / `illimite` |
+| Nombre de participations | Ex : 1 = une seule fois |
+
+---
+
+## Accès admin
+
+| URL | Description |
+|-----|-------------|
+| `/admin` | Dashboard |
+| `/admin/questions` | Gestion des questions |
+| `/admin/classement` | Classement & suppression |
+| `/admin/maillot` | Vote maillot |
+| `/admin/joueurs` | Liste des joueurs |
+| `/admin/parametres` | Paramètres du site |
+
+---
+
+## Structure du projet
+
+```
+app/
+├── Http/Controllers/
+│   ├── QuizController.php        # Logique du quiz (jouer, jokers, vérifier)
+│   ├── HomeController.php        # Page d'accueil + classement
+│   ├── JerseyController.php      # Vote maillot
+│   └── Admin/                    # Back-office
+│       ├── DashboardController.php
+│       ├── QuestionController.php
+│       ├── LeaderboardController.php
+│       ├── JerseyController.php
+│       ├── PlayersController.php
+│       └── SettingsController.php
+├── Models/
+│   ├── Question.php / Answer.php
+│   ├── Player.php                # Anti-triche (IP hash + browser token)
+│   ├── GameSession.php           # Session de jeu
+│   ├── GameAnswer.php            # Réponses enregistrées
+│   ├── JerseyOption.php / JerseyVote.php
+│   └── SiteSetting.php           # Paramètres dynamiques
+
+resources/views/
+├── layouts/fac.blade.php         # Layout principal (couleurs dynamiques)
+├── home.blade.php                # Page d'accueil
+├── classement.blade.php          # Classement avec podium
+├── quiz/                         # Formulaire, question, résultat
+└── admin/                        # Back-office
+```
+
+---
+
+## Système anti-triche
+
+Chaque joueur est identifié par :
+1. **IP hashée** (SHA-256 + app.key) — bloque les tentatives depuis le même réseau
+2. **Browser token** (UUID localStorage, hashé) — bloque les tentatives depuis le même navigateur
+
+Le mode de participation est configurable dans les paramètres admin.
+
+---
+
+## Licence
+
+Projet interne — FAC Andrézieux, Andrézieux-Bouthéon, Loire (42).
+*"Une autre idée de l'athlé"*
