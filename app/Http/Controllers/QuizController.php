@@ -8,6 +8,7 @@ use App\Models\Answer;
 use App\Models\Player;
 use App\Models\GameSession;
 use App\Models\GameAnswer;
+use App\Models\SiteSetting;
 
 class QuizController extends Controller
 {
@@ -22,13 +23,32 @@ class QuizController extends Controller
 
     public function demarrer(Request $request)
     {
-        $request->validate(['prenom' => 'required|string|max:50|regex:/^[a-zA-ZÀ-ÿ\s\-]+$/']);
+        $request->validate(['prenom' => 'required|string|max:50|regex:/^[a-zA-ZÀ-ÿ\s\-]+$/'], [
+            'prenom.required' => 'Votre prénom est obligatoire.',
+            'prenom.max'      => 'Le prénom ne peut pas dépasser 50 caractères.',
+            'prenom.regex'    => 'Le prénom ne peut contenir que des lettres, espaces et tirets.',
+        ]);
 
         $prenom = trim($request->prenom);
         $ip = $request->ip();
         $ipHash = Player::hashIp($ip);
         $browserToken = $request->input('browser_token');
-        $alreadyPlayed = Player::hasAlreadyPlayed($ip, $browserToken);
+
+        $mode = SiteSetting::get('participation_mode') ?? 'once';
+        $max  = max(1, (int)(SiteSetting::get('participation_nb') ?? 1));
+
+        $blocked = false;
+        if ($mode === 'once') {
+            $blocked = Player::countPlays($ip, $browserToken, false) >= $max;
+        } elseif ($mode === 'par_jour') {
+            $blocked = Player::countPlays($ip, $browserToken, true) >= $max;
+        }
+        // mode 'illimite' → $blocked stays false
+
+        if ($blocked) {
+            return redirect()->route('quiz.index')
+                ->with('already_played', $mode);
+        }
 
         $player = Player::create([
             'prenom' => $prenom,
@@ -41,7 +61,7 @@ class QuizController extends Controller
             'player_id' => $player->id,
             'score' => 0,
             'temps_total' => 0,
-            'counted' => !$alreadyPlayed,
+            'counted' => true,
         ]);
 
         $request->session()->put('quiz_session_id', $session->id);

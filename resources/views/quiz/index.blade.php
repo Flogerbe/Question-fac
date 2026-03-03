@@ -16,31 +16,47 @@
 
 @section('content')
 <div class="quiz-entry">
-    <div style="font-size:3rem;margin-bottom:1rem;">🏃</div>
-    <h1>Prêt à jouer ?</h1>
-    <p>Entrez votre prénom pour commencer le quiz de 20 questions !</p>
 
-    <div class="card">
-        <form action="{{ route('quiz.demarrer') }}" method="POST">
-            @csrf
-            <input type="hidden" name="browser_token" id="browser_token" value="">
-            <div class="form-group">
-                <label for="prenom">Votre prénom</label>
-                <input type="text" id="prenom" name="prenom" placeholder="Ex: Thomas" value="{{ old('prenom') }}" required autofocus autocomplete="off">
-                @error('prenom')
-                    <div class="error-msg">{{ $message }}</div>
-                @enderror
-            </div>
-            <button type="submit" class="btn btn-orange" style="width:100%;font-size:1.1rem;padding:1rem;">
-                🎮 C'est parti !
-            </button>
-        </form>
-    </div>
+    @if(session('already_played'))
+        <div style="font-size:3rem;margin-bottom:1rem;">🚫</div>
+        <h1 style="color:var(--rouge);">Déjà participé !</h1>
+        @if(session('already_played') === 'par_jour')
+            <p>Vous avez déjà joué aujourd'hui. Revenez demain pour une nouvelle partie !</p>
+        @else
+            <p>Vous avez déjà participé au quiz. Une seule participation est autorisée par personne.</p>
+        @endif
+        <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <a href="{{ route('classement') }}" class="btn btn-orange">🏆 Voir le classement</a>
+            <a href="{{ route('home') }}" class="btn btn-outline">🏠 Accueil</a>
+        </div>
+    @else
+        <div style="font-size:3rem;margin-bottom:1rem;">🏃</div>
+        <h1>Prêt à jouer ?</h1>
+        <p>Entrez votre prénom pour commencer le quiz de 20 questions !</p>
 
-    <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-        <a href="{{ route('regles') }}" class="btn btn-outline btn-sm">📖 Règles du jeu</a>
-        <a href="{{ route('classement') }}" class="btn btn-outline btn-sm">🏆 Classement</a>
-    </div>
+        <div class="card">
+            <form action="{{ route('quiz.demarrer') }}" method="POST">
+                @csrf
+                <input type="hidden" name="browser_token" id="browser_token" value="">
+                <div class="form-group">
+                    <label for="prenom">Votre prénom</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="Ex: Thomas" value="{{ old('prenom') }}" required autofocus autocomplete="off">
+                    @error('prenom')
+                        <div class="error-msg">{{ $message }}</div>
+                    @enderror
+                </div>
+                <button type="submit" class="btn btn-orange" style="width:100%;font-size:1.1rem;padding:1rem;">
+                    🎮 C'est parti !
+                </button>
+            </form>
+        </div>
+
+        <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <a href="{{ route('regles') }}" class="btn btn-outline btn-sm">📖 Règles du jeu</a>
+            <a href="{{ route('classement') }}" class="btn btn-outline btn-sm">🏆 Classement</a>
+        </div>
+    @endif
+
 </div>
 @endsection
 

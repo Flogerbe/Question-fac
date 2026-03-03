@@ -18,12 +18,14 @@ class SettingsController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'couleur_bleu'       => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'couleur_bleu_fonce' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'couleur_orange'     => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'site_titre'         => ['required', 'max:100'],
-            'site_sous_titre'    => ['required', 'max:200'],
-            'logo'               => ['nullable', 'image', 'max:2048'],
+            'couleur_bleu'        => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'couleur_bleu_fonce'  => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'couleur_orange'      => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'site_titre'          => ['required', 'max:100'],
+            'site_sous_titre'     => ['required', 'max:200'],
+            'logo'                => ['nullable', 'image', 'max:2048'],
+            'participation_mode'  => ['required', 'in:once,par_jour,illimite'],
+            'participation_nb'    => ['required', 'integer', 'min:1', 'max:99'],
         ]);
 
         SiteSetting::set('couleur_bleu',       $request->couleur_bleu);
@@ -31,6 +33,8 @@ class SettingsController extends Controller
         SiteSetting::set('couleur_orange',     $request->couleur_orange);
         SiteSetting::set('site_titre',         $request->site_titre);
         SiteSetting::set('site_sous_titre',    $request->site_sous_titre);
+        SiteSetting::set('participation_mode', $request->participation_mode);
+        SiteSetting::set('participation_nb',   $request->participation_nb);
 
         if ($request->hasFile('logo')) {
             $path = $request->file('logo')->storeAs('', 'logo.gif', 'public_img');

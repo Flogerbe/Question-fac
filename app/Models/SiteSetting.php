@@ -21,6 +21,8 @@ class SiteSetting extends Model
             'site_titre'         => 'Quiz FAC Andrézieux',
             'site_sous_titre'    => 'Testez vos connaissances sur l\'athlétisme et le club',
             'logo_path'          => 'img/logo.gif',
+            'participation_mode' => 'once',
+            'participation_nb'   => '1',
         ];
     }
 

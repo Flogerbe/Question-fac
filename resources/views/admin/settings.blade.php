@@ -80,6 +80,29 @@
         </div>
     </div>
 
+    {{-- Participation --}}
+    <div style="background:white;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:1.5rem;">
+        <h2 style="font-size:1rem;font-weight:700;color:#333;margin-bottom:1.2rem;border-bottom:2px solid var(--orange);padding-bottom:.5rem;">🎮 Participation au quiz</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+            <div>
+                <label for="participation_mode" style="display:block;font-size:.85rem;font-weight:600;color:#555;margin-bottom:.5rem;">Mode de participation</label>
+                <select id="participation_mode" name="participation_mode" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:6px;font-size:.9rem;">
+                    <option value="once"      {{ $settings['participation_mode'] === 'once'      ? 'selected' : '' }}>Une fois au total (définitif)</option>
+                    <option value="par_jour"  {{ $settings['participation_mode'] === 'par_jour'  ? 'selected' : '' }}>Une fois par jour (peut revenir le lendemain)</option>
+                    <option value="illimite"  {{ $settings['participation_mode'] === 'illimite'  ? 'selected' : '' }}>Illimité (pas de restriction)</option>
+                </select>
+                @error('participation_mode')<p style="color:red;font-size:.8rem;margin-top:.3rem;">{{ $message }}</p>@enderror
+                <p style="font-size:.78rem;color:#888;margin-top:.4rem;">Contrôle si un joueur peut rejouer après avoir terminé.</p>
+            </div>
+            <div>
+                <label for="participation_nb" style="display:block;font-size:.85rem;font-weight:600;color:#555;margin-bottom:.5rem;">Nombre de participations autorisées</label>
+                <input id="participation_nb" type="number" name="participation_nb" value="{{ $settings['participation_nb'] }}" min="1" max="99" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:6px;font-size:.9rem;">
+                @error('participation_nb')<p style="color:red;font-size:.8rem;margin-top:.3rem;">{{ $message }}</p>@enderror
+                <p style="font-size:.78rem;color:#888;margin-top:.4rem;">Ex : 1 = une seule fois, 3 = trois fois (selon le mode choisi).</p>
+            </div>
+        </div>
+    </div>
+
     <div style="display:flex;gap:1rem;margin-top:1.5rem;">
         <button type="submit" style="background:var(--orange);color:white;padding:.8rem 2rem;border-radius:8px;border:none;cursor:pointer;font-weight:700;font-size:.95rem;">💾 Enregistrer</button>
         <a href="{{ route('admin.settings.reset') }}" onclick="return confirm('Réinitialiser les couleurs du club ?')" style="background:#f3f4f6;color:#555;padding:.8rem 1.5rem;border-radius:8px;text-decoration:none;font-size:.85rem;display:inline-flex;align-items:center;">🔄 Réinitialiser les couleurs</a>
