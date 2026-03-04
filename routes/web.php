@@ -41,6 +41,7 @@ Route::post('/maillot/voter', [JerseyController::class, 'voter'])->name('jersey.
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('maintenance/migrate', [DashboardController::class, 'migrate'])->name('maintenance.migrate');
+    Route::post('maintenance/composer', [DashboardController::class, 'composerInstall'])->name('maintenance.composer');
 
     // Questions
     Route::resource('questions', QuestionController::class);

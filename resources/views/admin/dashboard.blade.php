@@ -58,10 +58,20 @@
             <a href="{{ route('admin.questions.index') }}" style="background:#f8f8f8;color:#333;padding:.7rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;text-align:center;border:1px solid #e5e7eb;">❓ Gérer les questions ({{ $stats['total_questions'] }})</a>
             <a href="{{ route('admin.leaderboard') }}" style="background:#f8f8f8;color:#333;padding:.7rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;text-align:center;border:1px solid #e5e7eb;">🏆 Voir le classement complet</a>
             <a href="{{ route('admin.jersey.index') }}" style="background:#f8f8f8;color:#333;padding:.7rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;text-align:center;border:1px solid #e5e7eb;">👕 Gérer le vote maillot</a>
-            <form method="POST" action="{{ route('admin.maintenance.migrate') }}" onsubmit="return confirm('Appliquer les mises à jour de la base de données ?')">
-                @csrf
-                <button type="submit" style="width:100%;background:#1e293b;color:#94a3b8;padding:.7rem 1rem;border-radius:8px;font-size:.9rem;text-align:center;border:1px solid #334155;cursor:pointer;">🔄 Mettre à jour la BDD</button>
-            </form>
+            <div style="border:1px solid #e5e7eb;border-radius:8px;padding:1rem;background:#f8fafc;">
+                <div style="font-size:.75rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.7rem;">🔧 Maintenance serveur</div>
+                <div style="display:flex;flex-direction:column;gap:.5rem;">
+                    <form method="POST" action="{{ route('admin.maintenance.migrate') }}" onsubmit="return confirm('Appliquer les migrations de base de données ?')">
+                        @csrf
+                        <button type="submit" style="width:100%;background:#1e293b;color:#94a3b8;padding:.6rem 1rem;border-radius:7px;font-size:.85rem;text-align:center;border:1px solid #334155;cursor:pointer;">🗄️ Mettre à jour la BDD</button>
+                    </form>
+                    <form method="POST" action="{{ route('admin.maintenance.composer') }}" onsubmit="return confirm('Réinstaller les dépendances PHP (vendor/) ? Cela peut prendre quelques minutes.')">
+                        @csrf
+                        <button type="submit" style="width:100%;background:#1e293b;color:#94a3b8;padding:.6rem 1rem;border-radius:7px;font-size:.85rem;text-align:center;border:1px solid #334155;cursor:pointer;">📦 Réinstaller vendor/ (Composer)</button>
+                    </form>
+                </div>
+                <div style="font-size:.72rem;color:#94a3b8;margin-top:.6rem;">À utiliser après un déploiement ou en cas d'erreur de dépendances.</div>
+            </div>
         </div>
     </div>
 </div>
