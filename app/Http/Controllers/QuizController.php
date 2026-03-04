@@ -72,11 +72,26 @@ class QuizController extends Controller
             'counted' => true,
         ]);
 
+        // Mélanger aléatoirement l'ordre des questions pour chaque partie
+        $questionIds = Question::active()->pluck('id')->toArray();
+        shuffle($questionIds);
+
         $request->session()->put('quiz_session_id', $session->id);
+        $request->session()->put('quiz_question_ids', $questionIds);
         $request->session()->put('quiz_question_index', 0);
         $request->session()->put('quiz_start_time', now()->timestamp);
 
         return redirect()->route('quiz.jouer');
+    }
+
+    private function getSessionQuestions(Request $request): \Illuminate\Support\Collection
+    {
+        $questionIds = $request->session()->get('quiz_question_ids', []);
+        if (empty($questionIds)) {
+            return collect();
+        }
+        $questionsById = Question::with('answers')->whereIn('id', $questionIds)->get()->keyBy('id');
+        return collect($questionIds)->map(fn($id) => $questionsById->get($id))->filter()->values();
     }
 
     public function jouer(Request $request)
@@ -88,7 +103,10 @@ class QuizController extends Controller
 
         $gameSession = GameSession::findOrFail($sessionId);
         $questionIndex = $request->session()->get('quiz_question_index', 0);
-        $questions = Question::active()->get();
+        $questions = $this->getSessionQuestions($request);
+        if ($questions->isEmpty()) {
+            return redirect()->route('quiz.index');
+        }
 
         if ($questionIndex >= count($questions)) {
             return redirect()->route('quiz.resultat');
