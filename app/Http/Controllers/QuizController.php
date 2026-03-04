@@ -146,7 +146,7 @@ class QuizController extends Controller
 
         $gameSession = GameSession::findOrFail($sessionId);
         $questionIndex = $request->session()->get('quiz_question_index', 0);
-        $questions = Question::active()->get();
+        $questions = $this->getSessionQuestions($request);
         $question = $questions[$questionIndex];
 
         $answerId = $request->input('answer_id');
@@ -203,7 +203,7 @@ class QuizController extends Controller
 
         $gameSession = GameSession::findOrFail($sessionId);
         $questionIndex = $request->session()->get('quiz_question_index', 0);
-        $questions = Question::active()->get();
+        $questions = $this->getSessionQuestions($request);
         $question = $questions[$questionIndex];
 
         $answerId = $request->input('answer_id');
