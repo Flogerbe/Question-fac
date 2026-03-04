@@ -7,7 +7,7 @@ Application web de quiz interactive développée pour l'Assemblée Générale du
 ## Fonctionnalités
 
 ### Côté public
-- **Quiz interactif** — 20 questions chronométrées (30 secondes par question)
+- **Quiz interactif** — 20 questions chronométrées (30 secondes par question), **ordre aléatoire** à chaque partie
 - **Système de points** — 500 pts de base + jusqu'à 500 pts de bonus vitesse
 - **3 jokers** — 50/50, Vote du public, Question au coach
 - **Retour visuel** — affichage en vert/rouge de la bonne/mauvaise réponse après chaque réponse
@@ -24,7 +24,7 @@ Application web de quiz interactive développée pour l'Assemblée Générale du
 - **Paramètres dynamiques** : couleurs, logo, textes, mode de participation, mode classement, vote
 - Mode de participation configurable : une fois au total / une fois par jour / illimité
 - Mode classement configurable : par points ou tirage au sort
-- **Mise à jour BDD en un clic** depuis le tableau de bord
+- **Maintenance serveur** : mise à jour BDD + réinstallation des dépendances (vendor/) depuis les Paramètres
 
 ---
 
@@ -123,9 +123,11 @@ composer install --no-dev
 npm run build
 ```
 
-Puis, dans le back-office admin : **Tableau de bord → 🔄 Mettre à jour la BDD**
+Puis, dans le back-office admin : **Paramètres → 🔧 Maintenance serveur**
 
-Ce bouton exécute `php artisan migrate --force` directement depuis l'interface, sans accès SSH.
+Deux boutons disponibles :
+- **🗄️ Mettre à jour la BDD** — exécute `php artisan migrate --force` sans accès SSH
+- **📦 Réinstaller vendor/** — exécute `composer install --no-dev` pour corriger les dépendances manquantes
 
 ---
 
@@ -154,13 +156,13 @@ Tous les paramètres sont modifiables depuis le back-office **`/admin/parametres
 | URL | Description |
 |-----|-------------|
 | `/install` | Installateur (première utilisation uniquement) |
-| `/admin` | Dashboard + bouton mise à jour BDD |
+| `/admin` | Dashboard |
 | `/admin/questions` | Gestion des questions |
 | `/admin/classement` | Classement & suppression |
 | `/admin/tirage` | Tirage au sort (3 catégories) |
 | `/admin/maillot` | Vote maillot / vote configurable |
 | `/admin/joueurs` | Liste des joueurs |
-| `/admin/parametres` | Paramètres du site |
+| `/admin/parametres` | Paramètres du site + maintenance serveur (BDD, vendor) |
 
 ---
 

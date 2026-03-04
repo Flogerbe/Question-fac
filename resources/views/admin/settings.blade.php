@@ -170,6 +170,22 @@
     </div>
 </form>
 
+{{-- Maintenance serveur (hors formulaire paramètres) --}}
+<div style="background:white;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:1.5rem;border-left:4px solid #334155;">
+    <h2 style="font-size:1rem;font-weight:700;color:#334155;margin-bottom:.4rem;border-bottom:2px solid #334155;padding-bottom:.5rem;">🔧 Maintenance serveur</h2>
+    <p style="font-size:.82rem;color:#888;margin-bottom:1.2rem;">Ces actions agissent directement sur le serveur. À utiliser après un déploiement ou en cas d'erreur de dépendances.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <form method="POST" action="{{ route('admin.maintenance.migrate') }}" onsubmit="return confirm('Appliquer les migrations de base de données ?')">
+            @csrf
+            <button type="submit" style="background:#1e293b;color:#94a3b8;padding:.7rem 1.4rem;border-radius:8px;border:1px solid #334155;cursor:pointer;font-size:.9rem;font-weight:600;">🗄️ Mettre à jour la BDD</button>
+        </form>
+        <form method="POST" action="{{ route('admin.maintenance.composer') }}" onsubmit="return confirm('Réinstaller les dépendances PHP (vendor/) ? Cela peut prendre quelques minutes.')">
+            @csrf
+            <button type="submit" style="background:#1e293b;color:#94a3b8;padding:.7rem 1.4rem;border-radius:8px;border:1px solid #334155;cursor:pointer;font-size:.9rem;font-weight:600;">📦 Réinstaller vendor/ (Composer)</button>
+        </form>
+    </div>
+</div>
+
 <script>
 function toggleTirageOptions() {
     const isTirage = document.querySelector('[name=classement_mode][value=tirage]').checked;
