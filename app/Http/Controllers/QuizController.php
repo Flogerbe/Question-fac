@@ -361,7 +361,7 @@ class QuizController extends Controller
         $correctAnswers = $gameSession->gameAnswers->where('is_correct', true)->count();
 
         // Nettoie la session quiz
-        $request->session()->forget(['quiz_session_id', 'quiz_question_index', 'quiz_start_time']);
+        $request->session()->forget(['quiz_session_id', 'quiz_question_ids', 'quiz_question_index', 'quiz_start_time']);
 
         return view('quiz.resultat', compact('gameSession', 'rank', 'totalQuestions', 'correctAnswers'));
     }
