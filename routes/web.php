@@ -9,8 +9,14 @@ use App\Http\Controllers\Admin\LeaderboardController;
 use App\Http\Controllers\Admin\JerseyController as AdminJerseyController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\PlayersController;
+use App\Http\Controllers\Admin\TirageController;
+use App\Http\Controllers\InstallController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+// === INSTALLATION (première utilisation) ===
+Route::get('/install', [InstallController::class, 'index'])->name('install');
+Route::post('/install', [InstallController::class, 'store'])->name('install.store');
 
 // === FRONT ===
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -34,6 +40,7 @@ Route::post('/maillot/voter', [JerseyController::class, 'voter'])->name('jersey.
 // === BACK-OFFICE ADMIN ===
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('maintenance/migrate', [DashboardController::class, 'migrate'])->name('maintenance.migrate');
 
     // Questions
     Route::resource('questions', QuestionController::class);
@@ -42,6 +49,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     // Classement
     Route::get('classement', [LeaderboardController::class, 'index'])->name('leaderboard');
     Route::delete('classement/{session}', [LeaderboardController::class, 'destroy'])->name('leaderboard.destroy');
+
+    // Tirage au sort
+    Route::get('tirage', [TirageController::class, 'index'])->name('tirage.index');
+    Route::post('tirage/{type}', [TirageController::class, 'draw'])->name('tirage.draw');
+    Route::delete('tirage/{type}', [TirageController::class, 'reset'])->name('tirage.reset');
 
     // Vote maillot
     Route::get('maillot', [AdminJerseyController::class, 'index'])->name('jersey.index');

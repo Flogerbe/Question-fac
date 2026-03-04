@@ -41,6 +41,9 @@
             <a href="{{ route('admin.leaderboard') }}" class="{{ request()->routeIs('admin.leaderboard') ? 'active' : '' }}">
                 🏆 Classement
             </a>
+            <a href="{{ route('admin.tirage.index') }}" class="{{ request()->routeIs('admin.tirage*') ? 'active' : '' }}">
+                🎲 Tirage au sort
+            </a>
             <a href="{{ route('admin.jersey.index') }}" class="{{ request()->routeIs('admin.jersey*') ? 'active' : '' }}">
                 👕 Vote Maillot
             </a>

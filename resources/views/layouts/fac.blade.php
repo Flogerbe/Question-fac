@@ -87,7 +87,9 @@
         <a href="{{ route('home') }}">🏠 Accueil</a>
         <a href="{{ route('regles') }}">📖 Règles</a>
         <a href="{{ route('classement') }}">🏆 Classement</a>
-        <a href="{{ route('jersey.index') }}">👕 Vote</a>
+        @if($S['vote_visible'] === '1')
+        <a href="{{ route('jersey.index') }}">👕 {{ $S['vote_label'] }}</a>
+        @endif
         <a href="{{ route('quiz.index') }}" class="nav-cta">🎮 Jouer</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -95,7 +97,9 @@
         <a href="{{ route('home') }}">🏠 Accueil</a>
         <a href="{{ route('regles') }}">📖 Règles du jeu</a>
         <a href="{{ route('classement') }}">🏆 Classement</a>
-        <a href="{{ route('jersey.index') }}">👕 Vote Maillot</a>
+        @if($S['vote_visible'] === '1')
+        <a href="{{ route('jersey.index') }}">👕 {{ $S['vote_label'] }}</a>
+        @endif
         <a href="{{ route('quiz.index') }}" style="color:var(--orange);font-weight:700;">🎮 Jouer au Quiz</a>
     </nav>
 </header>

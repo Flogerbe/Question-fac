@@ -31,4 +31,9 @@ class GameSession extends Model
     {
         return $this->hasMany(GameAnswer::class);
     }
+
+    public function tirageResults(): HasMany
+    {
+        return $this->hasMany(TirageResult::class);
+    }
 }

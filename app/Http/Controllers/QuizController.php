@@ -23,13 +23,20 @@ class QuizController extends Controller
 
     public function demarrer(Request $request)
     {
-        $request->validate(['prenom' => 'required|string|max:50|regex:/^[a-zA-ZÀ-ÿ\s\-]+$/'], [
+        $request->validate([
+            'prenom' => 'required|string|max:50|regex:/^[a-zA-ZÀ-ÿ\s\-]+$/',
+            'nom'    => 'required|string|max:50|regex:/^[a-zA-ZÀ-ÿ\s\-]+$/',
+        ], [
             'prenom.required' => 'Votre prénom est obligatoire.',
             'prenom.max'      => 'Le prénom ne peut pas dépasser 50 caractères.',
             'prenom.regex'    => 'Le prénom ne peut contenir que des lettres, espaces et tirets.',
+            'nom.required'    => 'Votre nom est obligatoire.',
+            'nom.max'         => 'Le nom ne peut pas dépasser 50 caractères.',
+            'nom.regex'       => 'Le nom ne peut contenir que des lettres, espaces et tirets.',
         ]);
 
         $prenom = trim($request->prenom);
+        $nom    = trim($request->nom);
         $ip = $request->ip();
         $ipHash = Player::hashIp($ip);
         $browserToken = $request->input('browser_token');
@@ -52,6 +59,7 @@ class QuizController extends Controller
 
         $player = Player::create([
             'prenom' => $prenom,
+            'nom'    => $nom,
             'ip_hash' => $ipHash,
             'browser_token' => $browserToken ? hash('sha256', $browserToken . config('app.key')) : null,
             'played_at' => now(),

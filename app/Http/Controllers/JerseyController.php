@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JerseyOption;
 use App\Models\JerseyVote;
-use App\Models\Player;
+use App\Models\SiteSetting;
 
 class JerseyController extends Controller
 {
     public function index(Request $request)
     {
+        if (SiteSetting::get('vote_visible') === '0') {
+            return redirect()->route('home');
+        }
+
         $options = JerseyOption::where('is_active', true)->withCount('votes')->get();
         $totalVotes = JerseyVote::count();
 

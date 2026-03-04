@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Player extends Model
 {
-    protected $fillable = ['prenom', 'ip_hash', 'browser_token', 'played_at'];
+    protected $fillable = ['prenom', 'nom', 'ip_hash', 'browser_token', 'played_at'];
 
     protected $casts = ['played_at' => 'datetime'];
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->nom ? $this->prenom . ' ' . strtoupper($this->nom) : $this->prenom;
+    }
 
     public function gameSessions(): HasMany
     {

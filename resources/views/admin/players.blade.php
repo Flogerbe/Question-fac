@@ -30,7 +30,7 @@
                     $counted = $bestSession && $bestSession->counted;
                 @endphp
                 <tr style="border-bottom:1px solid #f5f5f5;transition:background .15s;" onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background=''">
-                    <td style="padding:.8rem 1rem;font-weight:600;color:#111;">{{ $player->prenom }}</td>
+                    <td style="padding:.8rem 1rem;font-weight:600;color:#111;">{{ $player->full_name }}</td>
                     <td style="padding:.8rem 1rem;text-align:center;color:#555;">{{ $player->gameSessions->count() }}</td>
                     <td style="padding:.8rem 1rem;text-align:center;font-weight:700;color:var(--orange);">
                         {{ $bestSession ? number_format($bestSession->score, 0, ',', ' ').' pts' : '—' }}
@@ -46,7 +46,7 @@
                         {{ $player->played_at ? $player->played_at->format('d/m/Y H:i') : '—' }}
                     </td>
                     <td style="padding:.8rem 1rem;text-align:center;">
-                        <form action="{{ route('admin.players.destroy', $player) }}" method="POST" onsubmit="return confirm('Supprimer {{ $player->prenom }} et toutes ses parties ?');" style="display:inline;">
+                        <form action="{{ route('admin.players.destroy', $player) }}" method="POST" onsubmit="return confirm('Supprimer {{ $player->full_name }} et toutes ses parties ?');" style="display:inline;">
                             @csrf @method('DELETE')
                             <button type="submit" style="background:#fee2e2;color:#dc2626;border:none;padding:.3rem .7rem;border-radius:6px;cursor:pointer;font-size:.8rem;">🗑️</button>
                         </form>

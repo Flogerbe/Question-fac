@@ -6,7 +6,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;">
         <div class="card">
             <h2 style="color:var(--orange);margin-bottom:1rem;">🎯 Objectif</h2>
-            <p style="color:#ccc;line-height:1.7;">Répondre aux <strong style="color:var(--orange);">20 questions</strong> le plus rapidement possible. Votre score dépend de la <strong>justesse</strong> de vos réponses ET de votre <strong>vitesse</strong>.</p>
+            <p style="color:#ccc;line-height:1.7;">Répondez aux <strong style="color:var(--orange);">20 questions</strong> le plus rapidement possible. Votre score dépend de la <strong>justesse</strong> de vos réponses ET de votre <strong>vitesse</strong>.</p>
         </div>
         <div class="card">
             <h2 style="color:var(--orange);margin-bottom:1rem;">⏱️ Chronomètre</h2>
@@ -26,12 +26,17 @@
             <p style="color:#888;font-size:.85rem;margin-top:.8rem;">Chaque joker ne peut être utilisé qu'une seule fois par partie.</p>
         </div>
         <div class="card">
-            <h2 style="color:var(--orange);margin-bottom:1rem;">👤 Connexion</h2>
-            <p style="color:#ccc;line-height:1.7;">Saisissez simplement votre <strong style="color:var(--orange);">prénom</strong> pour commencer à jouer. Une seule partie par personne est prise en compte pour le classement.</p>
+            <h2 style="color:var(--orange);margin-bottom:1rem;">👤 Participation</h2>
+            <p style="color:#ccc;line-height:1.7;">Saisissez simplement votre <strong style="color:var(--orange);">prénom</strong> pour commencer. <strong>Une seule participation</strong> par personne est prise en compte pour le classement et les tirages.</p>
         </div>
         <div class="card">
-            <h2 style="color:var(--orange);margin-bottom:1rem;">🎁 Cadeaux</h2>
-            <p style="color:#ccc;line-height:1.7;">Des <strong style="color:var(--or);">récompenses</strong> sont remises aux meilleurs scores à l'issue de la soirée. Bonne chance à tous !</p>
+            <h2 style="color:var(--orange);margin-bottom:1rem;">🎲 Tirage au sort</h2>
+            <ul style="color:#ccc;line-height:2;list-style:none;">
+                <li>🎟️ <strong style="color:var(--or);">Esprit Club</strong> — Tous les participants sont tirés au sort</li>
+                <li>🏅 <strong style="color:var(--or);">100% Champion</strong> — Réservé aux participants sans faute</li>
+                <li>🎁 <strong style="color:var(--or);">Bonus</strong> — Une 2e chance pour tous</li>
+            </ul>
+            <p style="color:#888;font-size:.85rem;margin-top:.8rem;">Les gagnants sont désignés par tirage au sort parmi les participants éligibles.</p>
         </div>
     </div>
     <div style="text-align:center;margin-top:2.5rem;">

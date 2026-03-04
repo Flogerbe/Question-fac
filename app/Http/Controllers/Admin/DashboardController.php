@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 use App\Models\Question;
 use App\Models\GameSession;
@@ -32,5 +33,17 @@ class DashboardController extends Controller
             ->get();
 
         return view('admin.dashboard', compact('stats', 'topScores'));
+    }
+
+    public function migrate()
+    {
+        try {
+            Artisan::call('migrate', ['--force' => true, '--no-interaction' => true]);
+            $output = trim(Artisan::output());
+            $msg = $output ?: 'Base de données déjà à jour.';
+            return back()->with('success', '✅ Migration réussie : ' . $msg);
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Erreur lors de la migration : ' . $e->getMessage());
+        }
     }
 }

@@ -65,7 +65,7 @@
     </div>
 
     <div style="background:var(--gris-card);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:.9rem;color:var(--texte-mut);">
-        <strong style="color:var(--orange);">{{ $gameSession->player->prenom }}</strong>, merci d'avoir participé au Quiz FAC Andrézieux !
+        <strong style="color:var(--orange);">{{ $gameSession->player->full_name }}</strong>, merci d'avoir participé au Quiz FAC Andrézieux !
         @if($correctAnswers >= 15)
         Vous faites partie des meilleurs joueurs de la soirée — des cadeaux vous attendent peut-être ! 🎁
         @else

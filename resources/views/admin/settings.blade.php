@@ -80,6 +80,46 @@
         </div>
     </div>
 
+    {{-- Mode classement --}}
+    <div style="background:white;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:1.5rem;">
+        <h2 style="font-size:1rem;font-weight:700;color:#333;margin-bottom:1.2rem;border-bottom:2px solid var(--orange);padding-bottom:.5rem;">🏆 Mode du classement public</h2>
+        <div style="display:flex;gap:2rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+            <label style="display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;flex:1;min-width:200px;">
+                <input type="radio" name="classement_mode" value="points" {{ $settings['classement_mode'] === 'points' ? 'checked' : '' }} onchange="toggleTirageOptions()" style="margin-top:3px;accent-color:var(--orange);">
+                <div>
+                    <span style="font-weight:700;color:#333;">Classement par points</span>
+                    <p style="font-size:.8rem;color:#888;margin-top:2px;">Affiche le podium et la liste classée par score. Mode par défaut.</p>
+                </div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;flex:1;min-width:200px;">
+                <input type="radio" name="classement_mode" value="tirage" {{ $settings['classement_mode'] === 'tirage' ? 'checked' : '' }} onchange="toggleTirageOptions()" style="margin-top:3px;accent-color:var(--orange);">
+                <div>
+                    <span style="font-weight:700;color:#333;">Mode tirage au sort</span>
+                    <p style="font-size:.8rem;color:#888;margin-top:2px;">Affiche tous les participants sans classement. Les gagnants sont tirés au sort dans le back-office.</p>
+                </div>
+            </label>
+        </div>
+
+        <div id="tirage-options" style="{{ $settings['classement_mode'] === 'tirage' ? '' : 'display:none;' }}border-top:1px solid #f3f4f6;padding-top:1.2rem;">
+            <p style="font-size:.85rem;font-weight:600;color:#555;margin-bottom:1rem;">Nombre de gagnants par tirage :</p>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+                <div>
+                    <label for="tirage_esprit_club_nb" style="display:block;font-size:.82rem;font-weight:600;color:#555;margin-bottom:.4rem;">🎯 Esprit Club <span style="font-weight:400;color:#888;">(tous participants)</span></label>
+                    <input id="tirage_esprit_club_nb" type="number" name="tirage_esprit_club_nb" value="{{ $settings['tirage_esprit_club_nb'] }}" min="1" max="99" style="width:100%;padding:.5rem;border:1px solid #e5e7eb;border-radius:6px;font-size:.9rem;">
+                </div>
+                <div>
+                    <label for="tirage_champion_nb" style="display:block;font-size:.82rem;font-weight:600;color:#555;margin-bottom:.4rem;">🏅 100% Champion <span style="font-weight:400;color:#888;">(sans faute)</span></label>
+                    <input id="tirage_champion_nb" type="number" name="tirage_champion_nb" value="{{ $settings['tirage_champion_nb'] }}" min="1" max="99" style="width:100%;padding:.5rem;border:1px solid #e5e7eb;border-radius:6px;font-size:.9rem;">
+                </div>
+                <div>
+                    <label for="tirage_bonus_nb" style="display:block;font-size:.82rem;font-weight:600;color:#555;margin-bottom:.4rem;">🎁 Bonus <span style="font-weight:400;color:#888;">(2e chance)</span></label>
+                    <input id="tirage_bonus_nb" type="number" name="tirage_bonus_nb" value="{{ $settings['tirage_bonus_nb'] }}" min="1" max="99" style="width:100%;padding:.5rem;border:1px solid #e5e7eb;border-radius:6px;font-size:.9rem;">
+                </div>
+            </div>
+            <p style="font-size:.75rem;color:#aaa;margin-top:.8rem;">Ces valeurs définissent combien de gagnants seront tirés au sort pour chaque type. Modifiable à tout moment avant ou après le tirage.</p>
+        </div>
+    </div>
+
     {{-- Participation --}}
     <div style="background:white;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:1.5rem;">
         <h2 style="font-size:1rem;font-weight:700;color:#333;margin-bottom:1.2rem;border-bottom:2px solid var(--orange);padding-bottom:.5rem;">🎮 Participation au quiz</h2>
@@ -103,6 +143,27 @@
         </div>
     </div>
 
+    {{-- Vote --}}
+    <div style="background:white;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:1.5rem;">
+        <h2 style="font-size:1rem;font-weight:700;color:#333;margin-bottom:1.2rem;border-bottom:2px solid var(--orange);padding-bottom:.5rem;">👕 Vote (maillot ou autre)</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;">
+            <div>
+                <label style="display:block;font-size:.85rem;font-weight:600;color:#555;margin-bottom:.5rem;">Intitulé du vote <span style="color:red;">*</span></label>
+                <input type="text" name="vote_label" value="{{ $settings['vote_label'] }}" required maxlength="60" placeholder="ex : Vote Maillot, Vote Projet, …" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:6px;font-size:.9rem;">
+                @error('vote_label')<p style="color:red;font-size:.8rem;margin-top:.3rem;">{{ $message }}</p>@enderror
+                <p style="font-size:.78rem;color:#888;margin-top:.4rem;">Ce texte apparaît sur le bouton de la page d'accueil et dans la navigation.</p>
+            </div>
+            <div>
+                <label style="display:block;font-size:.85rem;font-weight:600;color:#555;margin-bottom:.8rem;">Visibilité</label>
+                <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;">
+                    <input type="checkbox" name="vote_visible" value="1" {{ $settings['vote_visible'] === '1' ? 'checked' : '' }} style="width:18px;height:18px;accent-color:var(--orange);cursor:pointer;">
+                    <span style="font-weight:600;color:#333;">Afficher le vote sur le site public</span>
+                </label>
+                <p style="font-size:.78rem;color:#888;margin-top:.5rem;">Si décoché, le bouton et le lien de navigation sont masqués. La page reste accessible via son URL directe.</p>
+            </div>
+        </div>
+    </div>
+
     <div style="display:flex;gap:1rem;margin-top:1.5rem;">
         <button type="submit" style="background:var(--orange);color:white;padding:.8rem 2rem;border-radius:8px;border:none;cursor:pointer;font-weight:700;font-size:.95rem;">💾 Enregistrer</button>
         <a href="{{ route('admin.settings.reset') }}" onclick="return confirm('Réinitialiser les couleurs du club ?')" style="background:#f3f4f6;color:#555;padding:.8rem 1.5rem;border-radius:8px;text-decoration:none;font-size:.85rem;display:inline-flex;align-items:center;">🔄 Réinitialiser les couleurs</a>
@@ -110,6 +171,10 @@
 </form>
 
 <script>
+function toggleTirageOptions() {
+    const isTirage = document.querySelector('[name=classement_mode][value=tirage]').checked;
+    document.getElementById('tirage-options').style.display = isTirage ? 'block' : 'none';
+}
 function updatePreview() {
     const bleu = document.querySelector('[name=couleur_bleu]').value;
     const orange = document.querySelector('[name=couleur_orange]').value;

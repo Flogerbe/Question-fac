@@ -39,7 +39,7 @@
                 @foreach($topScores as $i => $s)
                 <tr style="border-bottom:1px solid #f5f5f5;">
                     <td style="padding:.5rem .4rem;">{{ ['🥇','🥈','🥉','4','5'][$i] }}</td>
-                    <td style="padding:.5rem .4rem;font-weight:600;">{{ $s->player->prenom }}</td>
+                    <td style="padding:.5rem .4rem;font-weight:600;">{{ $s->player->full_name }}</td>
                     <td style="padding:.5rem .4rem;text-align:right;color:var(--orange);font-weight:700;">{{ number_format($s->score,0,',',' ') }}</td>
                     <td style="padding:.5rem .4rem;text-align:right;color:#888;">{{ floor($s->temps_total/60) }}m{{ $s->temps_total%60 }}s</td>
                 </tr>
@@ -58,6 +58,10 @@
             <a href="{{ route('admin.questions.index') }}" style="background:#f8f8f8;color:#333;padding:.7rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;text-align:center;border:1px solid #e5e7eb;">❓ Gérer les questions ({{ $stats['total_questions'] }})</a>
             <a href="{{ route('admin.leaderboard') }}" style="background:#f8f8f8;color:#333;padding:.7rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;text-align:center;border:1px solid #e5e7eb;">🏆 Voir le classement complet</a>
             <a href="{{ route('admin.jersey.index') }}" style="background:#f8f8f8;color:#333;padding:.7rem 1rem;border-radius:8px;text-decoration:none;font-size:.9rem;text-align:center;border:1px solid #e5e7eb;">👕 Gérer le vote maillot</a>
+            <form method="POST" action="{{ route('admin.maintenance.migrate') }}" onsubmit="return confirm('Appliquer les mises à jour de la base de données ?')">
+                @csrf
+                <button type="submit" style="width:100%;background:#1e293b;color:#94a3b8;padding:.7rem 1rem;border-radius:8px;font-size:.9rem;text-align:center;border:1px solid #334155;cursor:pointer;">🔄 Mettre à jour la BDD</button>
+            </form>
         </div>
     </div>
 </div>

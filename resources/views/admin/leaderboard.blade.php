@@ -23,7 +23,7 @@
             <tr style="border-bottom:1px solid #f0f0f0;">
                 <td style="padding:.8rem 1rem;text-align:center;font-weight:700;color:var(--orange);">{{ $rank++ }}</td>
                 <td style="padding:.8rem 1rem;">
-                    <div style="font-weight:600;">{{ $session->player->prenom }}</div>
+                    <div style="font-weight:600;">{{ $session->player->full_name }}</div>
                     <div style="font-size:.75rem;color:#aaa;">IP: {{ substr($session->player->ip_hash, 0, 8) }}...</div>
                 </td>
                 <td style="padding:.8rem 1rem;text-align:right;font-weight:700;color:var(--orange);">{{ number_format($session->score, 0, ',', ' ') }}</td>

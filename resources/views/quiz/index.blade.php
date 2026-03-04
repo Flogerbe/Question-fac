@@ -40,8 +40,15 @@
                 <input type="hidden" name="browser_token" id="browser_token" value="">
                 <div class="form-group">
                     <label for="prenom">Votre prénom</label>
-                    <input type="text" id="prenom" name="prenom" placeholder="Ex: Thomas" value="{{ old('prenom') }}" required autofocus autocomplete="off">
+                    <input type="text" id="prenom" name="prenom" placeholder="Ex: Thomas" value="{{ old('prenom') }}" required autofocus autocomplete="given-name">
                     @error('prenom')
+                        <div class="error-msg">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="nom">Votre nom</label>
+                    <input type="text" id="nom" name="nom" placeholder="Ex: Dupont" value="{{ old('nom') }}" required autocomplete="family-name">
+                    @error('nom')
                         <div class="error-msg">{{ $message }}</div>
                     @enderror
                 </div>

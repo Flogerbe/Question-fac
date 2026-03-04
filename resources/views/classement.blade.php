@@ -22,11 +22,10 @@
 .podium-item.p1 .podium-base{background:var(--or);height:18px;}
 .podium-item.p2 .podium-base{background:#a0a0a0;}
 .podium-item.p3 .podium-base{background:#a0522d;}
-/* Taille des colonnes du podium */
 .podium-item.p2{margin-bottom:24px;}
 .podium-item.p3{margin-bottom:8px;}
 
-/* Liste 4+ */
+/* Liste classement points */
 .score-list{display:flex;flex-direction:column;gap:.5rem;}
 .score-row{display:flex;align-items:center;gap:.8rem;background:var(--gris-card);border-radius:10px;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.05);}
 .score-row:hover{background:color-mix(in srgb,var(--gris-card) 80%,white 20%);}
@@ -35,6 +34,18 @@
 .sr-pts{font-weight:900;color:var(--orange);font-size:1rem;}
 .sr-time{font-size:.78rem;color:var(--texte-mut);margin-left:.4rem;}
 .sr-jokers{font-size:.85rem;margin-left:.3rem;}
+
+/* Mode tirage : liste participants */
+.tirage-intro{text-align:center;color:var(--texte-mut);font-size:.9rem;margin-bottom:1.5rem;padding:.75rem 1rem;background:var(--gris-card);border-radius:10px;border:1px solid rgba(247,148,29,.2);}
+.participants-list{display:flex;flex-direction:column;gap:.5rem;}
+.participant-row{display:flex;align-items:center;gap:.8rem;background:var(--gris-card);border-radius:10px;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.05);}
+.participant-row:hover{background:color-mix(in srgb,var(--gris-card) 80%,white 20%);}
+.participant-row.p-perfect{border-color:rgba(247,148,29,.4);}
+.pr-name{flex:1;font-weight:600;color:#fff;}
+.pr-pts{font-weight:900;color:var(--orange);font-size:1rem;}
+.pr-rep{font-size:.82rem;color:var(--texte-mut);margin-left:.3rem;}
+.pr-jokers{font-size:.85rem;margin-left:.3rem;}
+.pr-badge{font-size:.75rem;background:var(--orange);color:#000;font-weight:700;padding:.1rem .4rem;border-radius:4px;margin-left:.3rem;}
 
 .empty-state{text-align:center;padding:4rem 1.5rem;color:var(--texte-mut);}
 .empty-state p{font-size:3rem;margin-bottom:1rem;}
@@ -50,9 +61,9 @@
     .podium-name{font-size:.85rem;}
     .podium-pts{font-size:1rem;}
     .podium-time{font-size:.7rem;}
-    .score-row{padding:.6rem .8rem;gap:.6rem;}
-    .sr-name{font-size:.9rem;}
-    .sr-pts{font-size:.9rem;}
+    .score-row,.participant-row{padding:.6rem .8rem;gap:.6rem;}
+    .sr-name,.pr-name{font-size:.9rem;}
+    .sr-pts,.pr-pts{font-size:.9rem;}
     .sr-time{display:none;}
 }
 @media(max-width:400px){
@@ -66,6 +77,45 @@
 
 @section('content')
 <div class="classement-wrap">
+
+@if($mode === 'tirage')
+
+    <h1>🎲 <span>Participants</span> au tirage</h1>
+
+    @if($scores->count() === 0)
+        <div class="empty-state">
+            <p>🎮</p>
+            <span>Aucune partie terminée pour l'instant — soyez le premier !</span><br><br>
+            <a href="{{ route('quiz.index') }}" class="btn btn-orange" style="margin-top:1rem;">Jouer maintenant</a>
+        </div>
+    @else
+        <div class="tirage-intro">
+            🎟️ <strong>{{ $scores->count() }} participant{{ $scores->count() > 1 ? 's' : '' }}</strong> inscrit{{ $scores->count() > 1 ? 's' : '' }} au tirage au sort
+        </div>
+
+        <div class="participants-list">
+            @foreach($scores as $session)
+            @php
+                $bonnes = $session->gameAnswers->where('is_correct', true)->count();
+                $perfect = $bonnes === $totalQuestions;
+            @endphp
+            <div class="participant-row {{ $perfect ? 'p-perfect' : '' }}">
+                <div class="pr-name">{{ $session->player->full_name }}</div>
+                <div class="pr-pts">{{ number_format($session->score, 0, ',', ' ') }} pts</div>
+                <div class="pr-rep">{{ $bonnes }}/{{ $totalQuestions }} ✓</div>
+                <div class="pr-jokers">
+                    {{ $session->joker_fifty ? '✂️' : '' }}{{ $session->joker_public ? '👥' : '' }}{{ $session->joker_coach ? '🎓' : '' }}
+                </div>
+                @if($perfect)
+                    <span class="pr-badge">100%</span>
+                @endif
+            </div>
+            @endforeach
+        </div>
+    @endif
+
+@else
+
     <h1>🏆 <span>Classement</span> général</h1>
 
     @if($scores->count() === 0)
@@ -86,7 +136,7 @@
             <div class="podium-item p2">
                 <div class="podium-card">
                     <span class="podium-medal">🥈</span>
-                    <div class="podium-name">{{ $s->player->prenom }}</div>
+                    <div class="podium-name">{{ $s->player->full_name }}</div>
                     <div class="podium-pts">{{ number_format($s->score, 0, ',', ' ') }} pts</div>
                     <div class="podium-time">{{ floor($s->temps_total/60) }}m {{ $s->temps_total%60 }}s</div>
                 </div>
@@ -99,7 +149,7 @@
             <div class="podium-item p1">
                 <div class="podium-card">
                     <span class="podium-medal">🥇</span>
-                    <div class="podium-name">{{ $s->player->prenom }}</div>
+                    <div class="podium-name">{{ $s->player->full_name }}</div>
                     <div class="podium-pts">{{ number_format($s->score, 0, ',', ' ') }} pts</div>
                     <div class="podium-time">{{ floor($s->temps_total/60) }}m {{ $s->temps_total%60 }}s</div>
                 </div>
@@ -112,7 +162,7 @@
             <div class="podium-item p3">
                 <div class="podium-card">
                     <span class="podium-medal">🥉</span>
-                    <div class="podium-name">{{ $s->player->prenom }}</div>
+                    <div class="podium-name">{{ $s->player->full_name }}</div>
                     <div class="podium-pts">{{ number_format($s->score, 0, ',', ' ') }} pts</div>
                     <div class="podium-time">{{ floor($s->temps_total/60) }}m {{ $s->temps_total%60 }}s</div>
                 </div>
@@ -127,7 +177,7 @@
             @foreach($rest as $i => $session)
             <div class="score-row">
                 <div class="sr-rank">{{ $i + 4 }}</div>
-                <div class="sr-name">{{ $session->player->prenom }}</div>
+                <div class="sr-name">{{ $session->player->full_name }}</div>
                 <div class="sr-pts">{{ number_format($session->score, 0, ',', ' ') }} pts</div>
                 <div class="sr-time">{{ floor($session->temps_total/60) }}m {{ $session->temps_total%60 }}s</div>
                 <div class="sr-jokers">
@@ -139,5 +189,8 @@
         @endif
 
     @endif
+
+@endif
+
 </div>
 @endsection
