@@ -146,7 +146,7 @@
     {{-- Vote --}}
     <div style="background:white;border-radius:12px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:1.5rem;">
         <h2 style="font-size:1rem;font-weight:700;color:#333;margin-bottom:1.2rem;border-bottom:2px solid var(--orange);padding-bottom:.5rem;">👕 Vote (maillot ou autre)</h2>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;margin-bottom:1.2rem;">
             <div>
                 <label style="display:block;font-size:.85rem;font-weight:600;color:#555;margin-bottom:.5rem;">Intitulé du vote <span style="color:red;">*</span></label>
                 <input type="text" name="vote_label" value="{{ $settings['vote_label'] }}" required maxlength="60" placeholder="ex : Vote Maillot, Vote Projet, …" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:6px;font-size:.9rem;">
@@ -159,8 +159,25 @@
                     <input type="checkbox" name="vote_visible" value="1" {{ $settings['vote_visible'] === '1' ? 'checked' : '' }} style="width:18px;height:18px;accent-color:var(--orange);cursor:pointer;">
                     <span style="font-weight:600;color:#333;">Afficher le vote sur le site public</span>
                 </label>
-                <p style="font-size:.78rem;color:#888;margin-top:.5rem;">Si décoché, le bouton et le lien de navigation sont masqués. La page reste accessible via son URL directe.</p>
+                <p style="font-size:.78rem;color:#888;margin-top:.5rem;">Si décoché, le bouton et le lien de navigation sont masqués.</p>
             </div>
+        </div>
+
+        {{-- Mode d'affichage --}}
+        <div style="border-top:1px solid #f3f4f6;padding-top:1.2rem;">
+            <p style="font-size:.85rem;font-weight:600;color:#555;margin-bottom:.8rem;">Mode d'affichage par défaut</p>
+            <div id="display-mode-group" style="display:flex;gap:1rem;flex-wrap:wrap;">
+                @foreach(['grille' => ['🔲', 'Grille', 'Cartes en grille (défaut)'], 'liste' => ['☰', 'Liste', 'Cartes horizontales'], 'comparaison' => ['⚖️', 'Comparaison', 'Côte à côte pleine largeur']] as $val => [$icon, $nom, $desc])
+                <label for="vdm_{{ $val }}" style="display:flex;align-items:flex-start;gap:.5rem;cursor:pointer;flex:1;min-width:150px;background:#f8f9fa;border:2px solid {{ $settings['vote_display_mode'] === $val ? 'var(--orange)' : '#e5e7eb' }};border-radius:8px;padding:.7rem .9rem;transition:border-color .2s;">
+                    <input type="radio" id="vdm_{{ $val }}" name="vote_display_mode" value="{{ $val }}" {{ $settings['vote_display_mode'] === $val ? 'checked' : '' }} style="margin-top:3px;accent-color:var(--orange);">
+                    <div>
+                        <span style="font-weight:700;color:#333;">{{ $icon }} {{ $nom }}</span>
+                        <p style="font-size:.75rem;color:#888;margin-top:1px;">{{ $desc }}</p>
+                    </div>
+                </label>
+                @endforeach
+            </div>
+            <p style="font-size:.75rem;color:#aaa;margin-top:.6rem;">Les visiteurs peuvent changer le mode depuis la page vote, mais celui-ci est le mode affiché à l'arrivée.</p>
         </div>
     </div>
 
@@ -187,6 +204,14 @@
 </div>
 
 <script>
+// Highlight des labels radio mode d'affichage
+document.querySelectorAll('[name=vote_display_mode]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        document.querySelectorAll('[name=vote_display_mode]').forEach(r => {
+            r.closest('label').style.borderColor = r.checked ? 'var(--orange)' : '#e5e7eb';
+        });
+    });
+});
 function toggleTirageOptions() {
     const isTirage = document.querySelector('[name=classement_mode][value=tirage]').checked;
     document.getElementById('tirage-options').style.display = isTirage ? 'block' : 'none';

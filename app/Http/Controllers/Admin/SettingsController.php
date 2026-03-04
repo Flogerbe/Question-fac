@@ -32,6 +32,7 @@ class SettingsController extends Controller
             'tirage_bonus_nb'       => ['required', 'integer', 'min:1', 'max:99'],
             'vote_visible'          => ['nullable', 'in:0,1'],
             'vote_label'            => ['required', 'max:60'],
+            'vote_display_mode'     => ['required', 'in:grille,liste,comparaison'],
         ]);
 
         SiteSetting::set('couleur_bleu',          $request->couleur_bleu);
@@ -47,6 +48,7 @@ class SettingsController extends Controller
         SiteSetting::set('tirage_bonus_nb',       $request->tirage_bonus_nb);
         SiteSetting::set('vote_visible',          $request->has('vote_visible') ? '1' : '0');
         SiteSetting::set('vote_label',            $request->vote_label);
+        SiteSetting::set('vote_display_mode',     $request->vote_display_mode);
 
         if ($request->hasFile('logo')) {
             $request->file('logo')->move(public_path('img'), 'logo.gif');

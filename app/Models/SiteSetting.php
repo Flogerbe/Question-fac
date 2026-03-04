@@ -29,6 +29,7 @@ class SiteSetting extends Model
             'tirage_bonus_nb'        => '1',
             'vote_visible'           => '1',
             'vote_label'             => 'Vote Maillot',
+            'vote_display_mode'      => 'grille',
         ];
     }
 
