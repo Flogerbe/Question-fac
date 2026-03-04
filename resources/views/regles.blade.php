@@ -27,7 +27,7 @@
         </div>
         <div class="card">
             <h2 style="color:var(--orange);margin-bottom:1rem;">👤 Participation</h2>
-            <p style="color:#ccc;line-height:1.7;">Saisissez simplement votre <strong style="color:var(--orange);">prénom</strong> pour commencer. <strong>Une seule participation</strong> par personne est prise en compte pour le classement et les tirages.</p>
+            <p style="color:#ccc;line-height:1.7;">Saisissez simplement votre <strong style="color:var(--orange);">prénom et nom</strong> pour commencer. <strong>Une seule participation</strong> par personne est prise en compte pour le classement et les tirages.</p>
         </div>
         <div class="card">
             <h2 style="color:var(--orange);margin-bottom:1rem;">🎲 Tirage au sort</h2>
